@@ -11,8 +11,8 @@ COPY docker_entrypoint.sh /
 COPY smtp_nesono_com.conf /etc/stunnel/smtp_nesono_com.conf
 RUN apt-get update && \
     apt-get install -y  --no-install-recommends \
-    python3-pip supervisor stunnel
-RUN pip install flup
+    python3-pip supervisor stunnel python3-venv
+RUN python3 -m venv /opt/venv && /opt/venv/bin/pip3 install flup
 RUN mkdir -p /var/run/fcgi && \
     chown nginx:nginx /var/run/fcgi
 
