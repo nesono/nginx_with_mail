@@ -7,9 +7,9 @@ from flup.server.fcgi import WSGIServer
 import logging
 from typing import Final
 
-SMTP_SERVER_NAME : Final = os.getenv('SMTP_SERVER', "smtp.nesono.com")
+SMTP_SERVER_NAME : Final = os.getenv('SMTP_SERVER', "localhost")
 IMAP_SERVER_NAME : Final = os.getenv('IMAP_SERVER', "imap.nesono.com")
-SMTP_PORT : Final = os.getenv('SMTP_PORT', "25")
+SMTP_PORT : Final = os.getenv('SMTP_PORT', "1110")
 IMAP_PORT : Final = os.getenv('IMAP_PORT', "143")
 
 def app(environ, start_response):
