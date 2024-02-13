@@ -16,4 +16,6 @@ RUN python3 -m venv /opt/venv && /opt/venv/bin/pip3 install flup
 RUN mkdir -p /var/run/fcgi && \
     chown nginx:nginx /var/run/fcgi
 
+RUN rm -f /etc/nginx/conf.d/default.conf
+
 ENTRYPOINT ["/docker_entrypoint.sh"]
