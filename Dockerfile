@@ -10,10 +10,10 @@ RUN mkdir -p /etc/nginx/mail.d/
 COPY smtp.conf /etc/nginx/mail.d/smtp.conf
 COPY imap.conf /etc/nginx/mail.d/imap.conf
 
-COPY supervisord.conf /etc
+COPY supervisor_programs.conf /etc/supervisor/conf.d/
 COPY docker_entrypoint.sh /
 
-COPY smtp_nesono_com.conf /etc/stunnel/smtp_nesono_com.conf
+COPY stunnel.conf /etc/stunnel/
 
 RUN apt-get update && \
     apt-get install -y  --no-install-recommends \

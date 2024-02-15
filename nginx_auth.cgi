@@ -12,7 +12,7 @@ SMTP_SERVER_NAME : Final = os.getenv('SMTP_SERVER', "localhost")
 IMAP_SERVER_NAME : Final = os.getenv('IMAP_SERVER', "imap.nesono.com")
 # TODO(iss) change this back to 25
 SMTP_PORT : Final = os.getenv('SMTP_PORT', "1110")
-IMAP_PORT : Final = os.getenv('IMAP_PORT', "143")
+IMAP_PORT : Final = os.getenv('IMAP_PORT', "1111")
 
 def app(environ, start_response):
     headers = [('Content-Type', 'text/html')]
