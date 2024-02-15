@@ -10,6 +10,8 @@ mail {
     auth_http localhost:8080/auth;
 
     proxy_pass_error_message on;
+
+    proxy     on;
 EOF
 
 if [[ -n ${TLS_CERT:-} && -n ${TLS_KEY:-} ]]; then
