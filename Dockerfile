@@ -14,7 +14,6 @@ COPY nginx_auth.cgi /usr/local/bin
 RUN mkdir -p /etc/nginx/mail.d/
 COPY nginx/mail.d/smtp.conf /etc/nginx/mail.d/smtp.conf
 COPY nginx/mail.d/imap.conf /etc/nginx/mail.d/imap.conf
-COPY nginx/mail.d/sieve.conf /etc/nginx/mail.d/sieve.conf
 
 RUN python3 -m venv /opt/venv && /opt/venv/bin/pip3 install flup
 RUN mkdir -p /var/run/fcgi && \
