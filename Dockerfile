@@ -15,7 +15,8 @@ RUN mkdir -p /etc/nginx/mail.d/
 COPY nginx/mail.d/smtp.conf /etc/nginx/mail.d/smtp.conf
 COPY nginx/mail.d/imap.conf /etc/nginx/mail.d/imap.conf
 
-RUN python3 -m venv /opt/venv && /opt/venv/bin/pip3 install flup
+COPY requirements.txt /opt/
+RUN python3 -m venv /opt/venv && /opt/venv/bin/pip3 install -r /opt/requirements.txt
 RUN mkdir -p /var/run/fcgi && \
     chown nginx:nginx /var/run/fcgi
 

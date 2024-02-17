@@ -7,12 +7,14 @@ from flup.server.fcgi import WSGIServer
 import logging
 from typing import Final
 
-# TODO(iss) change this back to smtp.nesono.com
-SMTP_SERVER_NAME : Final = os.getenv('SMTP_SERVER', "localhost")
-IMAP_SERVER_NAME : Final = os.getenv('IMAP_SERVER', "localhost")
-# TODO(iss) change this back to 25
-SMTP_PORT : Final = os.getenv('SMTP_PORT', "1110")
-IMAP_PORT : Final = os.getenv('IMAP_PORT', "1111")
+SMTP_SERVER_NAME: Final = os.getenv('SMTP_SERVER', "localhost")
+IMAP_SERVER_NAME: Final = os.getenv('IMAP_SERVER', "localhost")
+
+SMTP_PORT: Final = os.getenv('SMTP_PORT', "1110")
+IMAP_PORT: Final = os.getenv('IMAP_PORT', "1111")
+
+AUTH_HTTP_DEBUG_LEVEL: Final = os.getenv('AUTH_HTTP_DEBUG_LEVEL', "INFO")
+
 
 def app(environ, start_response):
     headers = [('Content-Type', 'text/html')]
@@ -28,8 +30,6 @@ def app(environ, start_response):
 
     logging.debug(f'user: {auth_user}, protocol: {auth_protocol}')
 
-    # Check if the domain is in the KNOWN_DOMAINS dictionary
-    # If the request is for SMTP, return smtp.nesono.com:25
     if auth_protocol == "smtp":
         if not SMTP_SERVER_NAME:
             logging.error("SMTP_SERVER is not set")
@@ -41,7 +41,6 @@ def app(environ, start_response):
             headers.append(("Auth-Server", socket.gethostbyname(SMTP_SERVER_NAME)))
             headers.append(("Auth-Port", SMTP_PORT))
 
-    # If the request is for IMAP, return imap.nesono.com:143
     elif auth_protocol == "imap":
         if not IMAP_SERVER_NAME:
             logging.error("IMAP_SERVER is not set")
@@ -61,7 +60,20 @@ def app(environ, start_response):
     start_response('200 OK', headers)
     yield '\r\n'
 
+
+def string_to_log_level(s: str):
+    log_level_dictionary = {
+        "DEBUG": logging.DEBUG,
+        "INFO": logging.INFO,
+        "WARNING": logging.WARNING,
+        "ERROR": logging.ERROR,
+        "CRITICAL": logging.CRITICAL
+    }
+
+    return log_level_dictionary.get(s, logging.INFO)
+
+
 log_format = '%(asctime)s [%(levelname)s] %(message)s'
-logging.basicConfig(level=logging.DEBUG, format=log_format, stream=sys.stdout)
+logging.basicConfig(level=string_to_log_level(AUTH_HTTP_DEBUG_LEVEL), format=log_format, stream=sys.stdout)
 
 WSGIServer(app, bindAddress='/var/run/fcgi/nginx_auth.sock').run()
