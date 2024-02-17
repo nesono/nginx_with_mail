@@ -22,6 +22,12 @@ Docker Compose example:
     environment:
       TLS_CERT: /etc/nginx/certs/fullchain.pem
       TLS_KEY: /etc/nginx/certs/key.pem
+      IMAP_SERVER: localhost
+      IMAP_PORT: 1111
+      SMTP_SERVER: localhost
+      SMTP_PORT: 1110
+      SIEVE_SERVER: localhost
+      SIEVE_PORT: 1112
 #    labels:
 #      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
     network_mode: host

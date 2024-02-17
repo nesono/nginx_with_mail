@@ -35,7 +35,7 @@ cat >> /etc/nginx/nginx.conf <<EOF
 }
 EOF
 
-if [[ -n ${SIEVE_BACKEND:-} ]]; then
+if [[ -n ${SIEVE_SERVER:-} && -n ${SIEVE_PORT:-} ]]; then
   echo "Adding sieve configuration"
   cat >> /etc/nginx/nginx.conf <<EOF
 
@@ -61,7 +61,7 @@ EOF
 EOF
   fi
   cat >> /etc/nginx/nginx.conf <<EOF
-    proxy_pass ${SIEVE_BACKEND};
+    proxy_pass ${SIEVE_SERVER}:${SIEVE_PORT};
   }
 }
 EOF
