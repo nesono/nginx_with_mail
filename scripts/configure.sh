@@ -3,6 +3,7 @@ set -o errexit -o nounset -o pipefail
 
 echo "Setting up nginx.conf" >&2
 
+echo "Adding mail extension to nginx.conf" >&2
 cat >> /etc/nginx/nginx.conf <<EOF
 
 mail {
@@ -14,7 +15,23 @@ mail {
     proxy     on;
 EOF
 
+echo "Adding mail_http_auth.conf to /etc/nginx/conf.d/" >&2
+cat >> /etc/nginx/conf.d/mail_http_auth.conf <<'EOF'
+server {
+    listen 8080 default_server;
+    listen [::]:8080 default_server;
+    root /var/www/html;
+    server_name _;
+    location / {
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param PATH_INFO $fastcgi_script_name;
+        fastcgi_pass unix:/var/run/fcgi/nginx_auth.sock;
+        }
+}
+EOF
+
 if [[ -n ${MAIL_TLS_CERT:-} && -n ${MAIL_TLS_KEY:-} ]]; then
+  echo "Setting up SSL in nginx.conf" >&2
   cat >> /etc/nginx/nginx.conf <<EOF
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384';
@@ -25,7 +42,7 @@ if [[ -n ${MAIL_TLS_CERT:-} && -n ${MAIL_TLS_KEY:-} ]]; then
     ssl_session_timeout 10m;
 EOF
 else
-  echo "NO SSL SET UP TLS_CERT: ${MAIL_TLS_CERT:-}, TLS_KEY: ${MAIL_TLS_KEY:-}" >&2
+  echo "NO SSL SET UP MAIL_TLS_CERT: \"${MAIL_TLS_CERT:-}\", MAIL_TLS_KEY: \"${MAIL_TLS_KEY:-}\"" >&2
 fi
 
 cat >> /etc/nginx/nginx.conf <<EOF
@@ -54,7 +71,7 @@ EOF
     ssl_session_timeout 10m;
 EOF
   else
-  echo "NO SSL SET UP FOR SIEVE TLS_CERT: ${MAIL_TLS_CERT:-}, TLS_KEY: ${MAIL_TLS_KEY:-}" >&2
+  echo "NO SSL SET UP FOR SIEVE MAIL_TLS_CERT: ${MAIL_TLS_CERT:-}, MAIL_TLS_KEY: ${MAIL_TLS_KEY:-}" >&2
   cat >> /etc/nginx/nginx.conf <<EOF
     listen 64190;
 EOF
