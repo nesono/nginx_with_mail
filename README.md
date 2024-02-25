@@ -20,14 +20,16 @@ Docker Compose example:
 #      - nginx_html:/usr/share/nginx/html
       - /svc/volumes/acme/certs/mail.nesono.com:/etc/nginx/certs:ro
     environment:
-      TLS_CERT: /etc/nginx/certs/fullchain.pem
-      TLS_KEY: /etc/nginx/certs/key.pem
-      IMAP_SERVER: localhost
-      IMAP_PORT: 1111
+      MAIL_TLS_CERT: /etc/nginx/certs/fullchain.pem
+      MAIL_TLS_KEY: /etc/nginx/certs/key.pem
       SMTP_SERVER: localhost
-      SMTP_PORT: 1110
+      SMTP_PORT: 25
+      SUBMISSION_SERVER: localhost
+      SUBMISSION_PORT: 587
+      IMAP_SERVER: localhost
+      IMAP_PORT: 143
       SIEVE_SERVER: localhost
-      SIEVE_PORT: 1112
+      SIEVE_PORT: 4190
 #    labels:
 #      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
     network_mode: host
