@@ -7,7 +7,6 @@ RUN apt-get update && \
 
 COPY scripts/configure.sh /usr/local/bin
 
-RUN rm -f /etc/nginx/conf.d/default.conf
 COPY nginx/conf.d/http_auth.conf /etc/nginx/conf.d/http_auth.conf
 COPY nginx/fastcgi_params /etc/nginx/fastcgi_params
 COPY nginx_auth.cgi /usr/local/bin
