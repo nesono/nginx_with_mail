@@ -13,6 +13,7 @@ COPY nginx/fastcgi_params /etc/nginx/fastcgi_params
 COPY nginx_auth.cgi /usr/local/bin
 RUN mkdir -p /etc/nginx/mail.d/
 COPY nginx/mail.d/smtp.conf /etc/nginx/mail.d/smtp.conf
+COPY nginx/mail.d/submission.conf /etc/nginx/mail.d/submission.conf
 COPY nginx/mail.d/imap.conf /etc/nginx/mail.d/imap.conf
 
 COPY requirements.txt /opt/
@@ -22,8 +23,6 @@ RUN mkdir -p /var/run/fcgi && \
 
 COPY supervisord/programs.conf /etc/supervisor/conf.d/
 COPY docker_entrypoint.sh /
-
-COPY stunnel/stunnel.conf /etc/stunnel/
 
 
 ENTRYPOINT ["/docker_entrypoint.sh"]
