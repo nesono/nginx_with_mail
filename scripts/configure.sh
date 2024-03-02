@@ -8,27 +8,32 @@ cat >> /etc/nginx/nginx.conf <<EOF
 
 mail {
     server_name mail.nesono.com;
-    auth_http localhost:8080/auth;
 
     proxy_pass_error_message on;
 
     proxy     on;
 EOF
 
-echo "Adding mail_http_auth.conf to /etc/nginx/conf.d/" >&2
-cat >> /etc/nginx/conf.d/mail_http_auth.conf <<'EOF'
+echo "Adding mail_auth.conf to /etc/nginx/conf.d/" >&2
+cat >> /etc/nginx/conf.d/mail_auth.conf <<'EOF'
 server {
     listen 8080 default_server;
     listen [::]:8080 default_server;
     root /var/www/html;
     server_name _;
-    location / {
+    location /auth_smtp_imap {
         include /etc/nginx/fastcgi_params;
         fastcgi_param PATH_INFO $fastcgi_script_name;
-        fastcgi_pass unix:/var/run/fcgi/nginx_auth.sock;
-        }
+        fastcgi_pass unix:/var/run/fcgi/nginx_smtp_imap_auth.sock;
+    }
+    location /auth_submission {
+            include /etc/nginx/fastcgi_params;
+            fastcgi_param PATH_INFO $fastcgi_script_name;
+            fastcgi_pass unix:/var/run/fcgi/nginx_submission_auth.sock;
+    }
 }
 EOF
+
 
 if [[ -n ${MAIL_TLS_CERT:-} && -n ${MAIL_TLS_KEY:-} ]]; then
   echo "Setting up SSL in nginx.conf" >&2

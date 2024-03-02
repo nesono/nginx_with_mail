@@ -8,7 +8,9 @@ RUN apt-get update && \
 COPY scripts/configure.sh /usr/local/bin
 
 COPY nginx/fastcgi_params /etc/nginx/fastcgi_params
-COPY nginx_auth.cgi /usr/local/bin
+COPY nginx_smtp_imap_auth.cgi /usr/local/bin
+COPY nginx_submission_auth.cgi /usr/local/bin
+
 RUN mkdir -p /etc/nginx/mail.d/
 COPY nginx/mail.d/smtp.conf /etc/nginx/mail.d/smtp.conf
 COPY nginx/mail.d/submission.conf /etc/nginx/mail.d/submission.conf
