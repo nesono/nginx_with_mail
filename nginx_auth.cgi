@@ -42,7 +42,7 @@ def app(environ, start_response):
             headers.append(("Auth-Server", socket.gethostbyname(SMTP_SERVER_NAME)))
             headers.append(("Auth-Port", SMTP_PORT))
 
-    if auth_protocol == "submission":
+    elif auth_protocol == "submission":
         if not SUBMISSION_SERVER_NAME:
             logging.error("SMTP_SERVER is not set")
         elif not SUBMISSION_PORT:
