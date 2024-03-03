@@ -15,7 +15,7 @@ mail {
 EOF
 
 echo "Adding mail_auth.conf to /etc/nginx/conf.d/" >&2
-cat >> /etc/nginx/conf.d/mail_auth.conf <<'EOF'
+cat > /etc/nginx/conf.d/mail_auth.conf <<'EOF'
 server {
     listen 8080 default_server;
     listen [::]:8080 default_server;
