@@ -43,7 +43,6 @@ if [[ -n ${MAIL_TLS_CERT:-} && -n ${MAIL_TLS_KEY:-} ]]; then
     ssl_prefer_server_ciphers off;
     ssl_certificate      ${MAIL_TLS_CERT};
     ssl_certificate_key  ${MAIL_TLS_KEY};
-    ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 EOF
 else
