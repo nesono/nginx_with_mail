@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -o errexit -o nounset -o pipefail
 
+echo "Checking if we need to roll back old changes" >&2
+if [[ -r /etc/nginx/nginx.conf.bup ]]; then
+  echo "Rolling back changes" >&2
+  cp /etc/nginx/nginx.conf.bup /etc/nginx/nginx.conf
+else
+  echo "Backing up original" >&2
+  cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bup
+fi
+
 echo "Setting up nginx.conf" >&2
 
 echo "Adding mail extension to nginx.conf" >&2
