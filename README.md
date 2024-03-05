@@ -6,22 +6,23 @@ Docker Compose example:
 
 ```yaml
   nginx-proxy:
-    image: nesono/nginx_with_mail:2024-02-15.1.pre
+    image: nesono/nginx_with_mail:2024-03-05
     container_name: nginx-proxy
-    # The ports are ignored, since we use network_mode: host
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#      - "2525:2525"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "2525:2525"
     volumes:
-#      - nginx_conf:/etc/nginx/conf.d:ro
-#      - nginx_mail:/etc/nginx/mail.d:ro
-#      - nginx_vhost:/etc/nginx/vhost.d:ro
-#      - nginx_html:/usr/share/nginx/html
+      - nginx_conf:/etc/nginx/conf.d:ro
+      - nginx_mail:/etc/nginx/mail.d:ro
+      - nginx_vhost:/etc/nginx/vhost.d:ro
+      - nginx_html:/usr/share/nginx/html
       - /svc/volumes/acme/certs/mail.nesono.com:/etc/nginx/certs:ro
     environment:
       MAIL_TLS_CERT: /etc/nginx/certs/fullchain.pem
       MAIL_TLS_KEY: /etc/nginx/certs/key.pem
+      SMTP_BANNER_NAME: smtp.example.com
+      IMAP_BANNER_NAME: imap.example.com
       SMTP_SERVER: localhost
       SMTP_PORT: 25
       SUBMISSION_SERVER: localhost
@@ -30,8 +31,7 @@ Docker Compose example:
       IMAP_PORT: 143
       SIEVE_SERVER: localhost
       SIEVE_PORT: 4190
-#    labels:
-#      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
-    network_mode: host
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
     restart: on-failure
 ```
