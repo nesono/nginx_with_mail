@@ -7,7 +7,7 @@ server {
     proxy_smtp_auth on;
 
     xclient on;
-    server_name smtp.nginx;
+    server_name ${SMTP_BANNER_NAME};
 }
 
 server {
@@ -18,5 +18,5 @@ server {
     proxy_smtp_auth on;
 
     xclient on;
-    server_name smtps.nginx;
+    server_name ${SMTP_BANNER_NAME};
 }

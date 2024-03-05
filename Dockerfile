@@ -12,9 +12,9 @@ COPY nginx_smtp_imap_auth.cgi /usr/local/bin
 COPY nginx_submission_auth.cgi /usr/local/bin
 
 RUN mkdir -p /etc/nginx/mail.d/
-COPY nginx/mail.d/smtp.conf /etc/nginx/mail.d/smtp.conf
-COPY nginx/mail.d/submission.conf /etc/nginx/mail.d/submission.conf
-COPY nginx/mail.d/imap.conf /etc/nginx/mail.d/imap.conf
+COPY nginx/mail.d/smtp.template /etc/nginx/mail.d/smtp.template
+COPY nginx/mail.d/submission.template /etc/nginx/mail.d/submission.template
+COPY nginx/mail.d/imap.template /etc/nginx/mail.d/imap.template
 
 COPY requirements.txt /opt/
 RUN python3 -m venv /opt/venv && /opt/venv/bin/pip3 install -r /opt/requirements.txt

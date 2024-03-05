@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 set -o errexit -o nounset -o pipefail
 
-echo "Checking if we need to roll back old changes" >&2
 if [[ -r /etc/nginx/nginx.conf.bup ]]; then
-  echo "Rolling back changes" >&2
+  echo "Rolling back nginx.conf changes" >&2
   cp /etc/nginx/nginx.conf.bup /etc/nginx/nginx.conf
 else
-  echo "Backing up original" >&2
+  echo "Backing up original nginx.conf" >&2
   cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bup
 fi
 
 echo "Setting up nginx.conf" >&2
-
 echo "Adding mail extension to nginx.conf" >&2
 cat >> /etc/nginx/nginx.conf <<EOF
 
@@ -65,7 +63,7 @@ cat >> /etc/nginx/nginx.conf <<EOF
 EOF
 
 if [[ -n ${SIEVE_SERVER:-} && -n ${SIEVE_PORT:-} ]]; then
-  echo "Adding sieve configuration"
+  echo "Adding sieve configuration" >&2
   cat >> /etc/nginx/nginx.conf <<EOF
 
 stream {
@@ -95,7 +93,17 @@ EOF
 }
 EOF
 else
-  echo "NO SIEVE CONFIGURATION ADDED"
+  echo "NO SIEVE CONFIGURATION ADDED" >&2
 fi
 
-echo "Configure done"
+
+: ${SMTP_BANNER_NAME:=smtp.nginx}
+: ${IMAP_BANNER_NAME:=imap.nginx}
+export SMTP_BANNER_NAME
+export IMAP_BANNER_NAME
+echo "Creating nginx mail configuration from templates" >&2
+envsubst < /etc/nginx/mail.d/smtp.template > /etc/nginx/mail.d/smtp.conf
+envsubst < /etc/nginx/mail.d/submission.template > /etc/nginx/mail.d/submission.conf
+envsubst < /etc/nginx/mail.d/imap.template > /etc/nginx/mail.d/imap.conf
+
+echo "Configure done" >&2

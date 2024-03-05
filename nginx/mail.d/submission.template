@@ -7,5 +7,5 @@ server {
     proxy_smtp_auth on;
 
     xclient on;
-    server_name submission.nginx;
+    server_name ${SMTP_BANNER_NAME};
 }

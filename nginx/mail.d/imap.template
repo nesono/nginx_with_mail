@@ -5,7 +5,7 @@ server {
     protocol imap;
     starttls only;
 
-    server_name imap.nginx;
+    server_name ${IMAP_BANNER_NAME};
 }
 
 server {
@@ -14,5 +14,5 @@ server {
     listen 993 ssl;
     protocol imap;
 
-    server_name imaps.nginx;
+    server_name ${IMAP_BANNER_NAME};
 }
