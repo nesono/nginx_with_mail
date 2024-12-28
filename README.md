@@ -9,9 +9,13 @@ Docker Compose example:
     image: nesono/nginx_with_mail:2024-03-05
     container_name: nginx-proxy
     ports:
-      - "80:80"
-      - "443:443"
-      - "2525:2525"
+      - "80:80"     # HTTP (for acme-companion)
+      - "443:443"   # HTTPS
+      - "25:25"     # SMTP
+      - "587:587"   # SUBMISSION
+      - "465:465"   # SMTPS (terminated here)
+      - "143:143"   # IMAP
+      - "993:993"   # IMAPS (terminated here)
     volumes:
       - nginx_conf:/etc/nginx/conf.d:ro
       - nginx_mail:/etc/nginx/mail.d:ro
@@ -21,6 +25,7 @@ Docker Compose example:
     environment:
       MAIL_TLS_CERT: /etc/nginx/certs/fullchain.pem
       MAIL_TLS_KEY: /etc/nginx/certs/key.pem
+      SERVER_NAME: mail.example.com
       SMTP_BANNER_NAME: smtp.example.com
       IMAP_BANNER_NAME: imap.example.com
       SMTP_SERVER: localhost

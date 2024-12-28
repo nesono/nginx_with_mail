@@ -14,31 +14,9 @@ echo "Adding mail extension to nginx.conf" >&2
 cat >> /etc/nginx/nginx.conf <<EOF
 
 mail {
-    server_name mail.nesono.com;
-
+    server_name ${SERVER_NAME};
     proxy_pass_error_message on;
-
     proxy     on;
-EOF
-
-echo "Adding mail_auth.conf to /etc/nginx/conf.d/" >&2
-cat > /etc/nginx/conf.d/mail_auth.conf <<'EOF'
-server {
-    listen 8080 default_server;
-    listen [::]:8080 default_server;
-    root /var/www/html;
-    server_name _;
-    location /auth_smtp_imap {
-        include /etc/nginx/fastcgi_params;
-        fastcgi_param PATH_INFO $fastcgi_script_name;
-        fastcgi_pass unix:/var/run/fcgi/nginx_smtp_imap_auth.sock;
-    }
-    location /auth_submission {
-            include /etc/nginx/fastcgi_params;
-            fastcgi_param PATH_INFO $fastcgi_script_name;
-            fastcgi_pass unix:/var/run/fcgi/nginx_submission_auth.sock;
-    }
-}
 EOF
 
 
@@ -95,6 +73,26 @@ EOF
 else
   echo "NO SIEVE CONFIGURATION ADDED" >&2
 fi
+
+echo "Adding mail_auth.conf to /etc/nginx/conf.d/" >&2
+cat > /etc/nginx/conf.d/mail_auth.conf <<'EOF'
+server {
+    listen 8080 default_server;
+    listen [::]:8080 default_server;
+    root /var/www/html;
+    server_name _;
+    location /auth_smtp_imap {
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param PATH_INFO $fastcgi_script_name;
+        fastcgi_pass unix:/var/run/fcgi/nginx_smtp_imap_auth.sock;
+    }
+    location /auth_submission {
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param PATH_INFO $fastcgi_script_name;
+        fastcgi_pass unix:/var/run/fcgi/nginx_submission_auth.sock;
+    }
+}
+EOF
 
 
 : ${SMTP_BANNER_NAME:=smtp.nginx}

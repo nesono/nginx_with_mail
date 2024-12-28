@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:1.27.3
 LABEL maintainer="Jochen Issing <c.333+github@nesono.com> (@jochenissing)"
 
 RUN apt-get update && \
